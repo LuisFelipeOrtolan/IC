@@ -32,7 +32,7 @@ def separaJogadores(partida_df):
 	time2_df['clube_id'] = time2
 
 	dados = []
-	for posicao in time1_df.index:
+	for posicao in range(1,6):
 		manipulacao = time1_df.query("posicao_id == @posicao")
 		colunas = list(manipulacao.columns)
 		for item in ['clube_id', 'partida_id','mando']:
@@ -41,12 +41,17 @@ def separaJogadores(partida_df):
 		for item in colunas:
 			manipulacao = manipulacao.rename(columns={item:item+'_'+str(int(posicao))})
 			manipulacao.reset_index(drop = True, inplace = True)
+		if(manipulacao.empty):
+			manipulacao.loc[len(manipulacao)] = 0
+			manipulacao.loc[len(manipulacao)-1,'clube_id'] = time1
+			manipulacao.loc[len(manipulacao)-1,'partida_id'] = partida_df.partida_id.unique()[0]
+			manipulacao.loc[len(manipulacao)-1,'mando'] = time1_df['mando'].unique()[0]
 		dados.append(manipulacao)
-	
+
 	final_time1 = pd.concat([dados[0], dados[1], dados[2], dados[3], dados[4]], axis = 1)
 
 	dados = []
-	for posicao in time2_df.index:
+	for posicao in range(1,6):
 		manipulacao = time2_df.query("posicao_id == @posicao")
 		colunas = list(manipulacao.columns)
 		for item in ['clube_id', 'partida_id','mando']:
@@ -55,12 +60,17 @@ def separaJogadores(partida_df):
 		for item in colunas:
 			manipulacao = manipulacao.rename(columns={item:item+'_'+str(int(posicao))})
 			manipulacao.reset_index(drop = True, inplace = True)
+		if(manipulacao.empty):
+			manipulacao.loc[len(manipulacao)] = 0
+			manipulacao.loc[len(manipulacao)-1,'clube_id'] = time2
+			manipulacao.loc[len(manipulacao)-1,'partida_id'] = partida_df.partida_id.unique()[0]
+			manipulacao.loc[len(manipulacao)-1,'mando'] = time2_df['mando'].unique()[0]
+		
 		dados.append(manipulacao)
 
 	final_time2 = pd.concat([dados[0], dados[1], dados[2], dados[3], dados[4]], axis = 1)
 	final = pd.concat([final_time1, final_time2])
 	return final
-
 
 primeira_partida = scouts['partida_id'].iloc[0]
 
