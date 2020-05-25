@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from sklearn.cluster import KMeans
 
 # Opening Csv.
 scouts = pd.read_csv("Csv's/2014_scouts.csv")
@@ -84,4 +85,6 @@ for partida in scouts.partida_id.unique():
 scouts_detalhado = scouts_detalhado.loc[:,~scouts_detalhado.columns.duplicated()]
 scouts_detalhado.sort_values(by = 'partida_id', inplace = True)
 scouts_detalhado.reset_index(drop = True, inplace = True)
+
 print(scouts_detalhado)
+scouts_detalhado.to_csv("Csv's/scouts_por_time_detalhado.csv", index = False)

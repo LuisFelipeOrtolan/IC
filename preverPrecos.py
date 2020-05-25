@@ -24,6 +24,8 @@ scouts.drop(scouts[(scouts.posicao_id == 6)].index, inplace = True)
 x = np.column_stack((scouts.FS,scouts.PE,scouts.A,scouts.FT,scouts.FD,scouts.FF,scouts.G,scouts.I,scouts.PP,scouts.RB,scouts.FC,
 	scouts.GC,scouts.CA,scouts.CV,scouts.SG,scouts.DD,scouts.DP,scouts.GS))
 
+print(x)
+
 # Using Polynomial Regression, degrees one to four.
 for degree in range(1,5):
 	modelo = make_pipeline(PolynomialFeatures(degree), LinearRegression())

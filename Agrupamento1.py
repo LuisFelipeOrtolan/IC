@@ -37,3 +37,4 @@ scouts = scouts.merge(vencedores, on = 'partida_id')
 scouts.loc[(scouts['vencedor'] != 0) & (scouts['vencedor'] != scouts['clube_id']), 'vencedor'] = -1
 scouts.loc[scouts['vencedor'] > 0, 'vencedor'] = 1
 print(scouts)
+scouts.to_csv("Csv's/scouts_detalhado.csv", index = False)
