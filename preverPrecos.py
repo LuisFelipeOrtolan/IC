@@ -3,31 +3,38 @@
 # Imports.
 import pandas as pd 
 import numpy as np
-import scipy as sp
 from sklearn.linear_model import LinearRegression
-import statsmodels.api as sm
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.metrics import mean_squared_error
-from sklearn.pipeline import make_pipeline
+from sklearn.metrics import mean_squared_error,r2_score
+from sklearn.model_selection import train_test_split
 
 # Opening the csv.
 scouts = pd.read_csv("Csv's/2014_scouts.csv")
 
 # Prepairing data.
-scouts.drop(scouts[(scouts.variacao_num == None)].index, inplace = True)
+scouts.drop(scouts[(scouts.pontos_num == None)].index, inplace = True)
 scouts.drop(scouts[(scouts.posicao_id == 6)].index, inplace = True)
-
-# Option to get only one position.
-# scouts.drop(scouts[(scouts.posicao_id != 1)].index, inplace = True)
 
 # Stacking the data for the regression.
 x = np.column_stack((scouts.FS,scouts.PE,scouts.A,scouts.FT,scouts.FD,scouts.FF,scouts.G,scouts.I,scouts.PP,scouts.RB,scouts.FC,
 	scouts.GC,scouts.CA,scouts.CV,scouts.SG,scouts.DD,scouts.DP,scouts.GS))
+y = scouts.pontos_num
 
-print(x)
+np.random.seed(30284)
+x_train, x_test, y_train, y_test = train_test_split(x,y)
 
 # Using Polynomial Regression, degrees one to four.
-for degree in range(1,5):
-	modelo = make_pipeline(PolynomialFeatures(degree), LinearRegression())
-	modelo.fit(x,scouts.variacao_num)
-	print(degree, " = ", modelo.score(x,scouts.variacao_num))
+model = LinearRegression()
+model.fit(x_train, y_train)
+
+# Printing each scout and what its importance
+scouts_names = ['FS','PE','A','FT','FD','FF','G','I','PP','RB','FC','GC','CA','CV','SG','DD','DP','GS']
+for i in range(0, len(scouts_names)):
+	print(scouts_names[i], ": ", round(model.coef_[i],2))
+
+print()
+
+# The Score
+predictions = model.predict(x_test)
+print("Score for the Linear Regressor = ", r2_score(y_test, predictions))
+print("Mean Squared Error for the Linear Regressor = ", mean_squared_error(y_test, predictions))
+print()

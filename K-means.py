@@ -1,16 +1,18 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
+import seaborn as sns
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score, mean_squared_error
 from sklearn.feature_selection import SelectKBest, chi2
+from sklearn.decomposition import PCA
 from sklearn import manifold
 
 # For scouts that every line has the scouts from every position in a match:
 
 # Opening csv.
 scouts_por_time_detalhado = pd.read_csv("Csv's/scouts_por_time_detalhado.csv")
+
 
 # Dropping unneeded data.
 scouts_por_time_detalhado.drop(columns = ['clube_id','partida_id'], inplace = True)
@@ -50,16 +52,26 @@ plt.show()
 
 # Using the silhouette model to try to discover the best number of clusters for the K-means algorithm.
 sil = []
-sil_aux = []
 for k in range(2,11):
 	kmeans = KMeans(n_clusters = k).fit(x)
 	labels = kmeans.labels_
 	sil.append(silhouette_score(x,labels, metric = 'euclidean'))
-	x_aux = SelectKBest(chi2, k = k).fit_transform(x,labels)
-	sil_aux.append(silhouette_score(x_aux,labels, metric = 'euclidean'))
 
 print("Original silhouette scoure: ",sil)
-print("New silhouette scoure: ",sil_aux)
+
+# Trying using the PCA to group better.
+
+pca = PCA(n_components = int(x.shape[1]/10))
+
+x_reduced = pca.fit_transform(x)
+
+sil = []
+for k in range(2,11):
+	kmeans = KMeans(n_clusters = k).fit(x_reduced)
+	labels = kmeans.labels_
+	sil.append(silhouette_score(x,labels, metric = 'euclidean'))
+
+print("PCA silhouette score: ", sil)
 
 # Plotting the MDS graphic
 mds = manifold.MDS(2, max_iter = 1000, n_init = 1)
@@ -73,6 +85,7 @@ plt.show()
 # Opening csv.
 scouts_detalhado = pd.read_csv("Csv's/scouts_detalhado.csv")
 
+
 # Dropping unneeded data.
 scouts_detalhado.drop(columns = ['clube_id','partida_id', 'pontos_num','preco_num','variacao_num', 'vencedor'], inplace = True)
 
@@ -81,7 +94,6 @@ for cols in scouts_detalhado.columns.tolist()[1:]:
 	if not (scouts_detalhado[scouts_detalhado[cols] < 0].empty):
 		aux = scouts_detalhado[scouts_detalhado[cols] < 0]
 
-print(aux)
 index = aux.index.values.tolist()
 scouts_detalhado.drop(scouts_detalhado.index[index], inplace = True)
 
@@ -106,20 +118,29 @@ plt.show()
 
 # Using the silhouette model to try to discover the best number of clusters for the K-means algorithm.
 sil = []
-sil_aux = []
 
 for k in range(2,11):
 	kmeans = KMeans(n_clusters = k).fit(x)
 	labels = kmeans.labels_
 	sil.append(silhouette_score(x,labels, metric = 'euclidean'))
-	x_aux = SelectKBest(chi2, k = k).fit_transform(x,labels)
-	sil_aux.append(silhouette_score(x_aux,labels, metric = 'euclidean'))
 
 print("Original silhouette scoure: ", sil)
-print("New silhouette scoure: ", sil_aux)
+
+# Trying using the PCA to group better.
+pca = PCA(n_components = int(x.shape[1]/10))
+
+x_reduced = pca.fit_transform(x)
+
+sil = []
+for k in range(2,11):
+	kmeans = KMeans(n_clusters = k).fit(x_reduced)
+	labels = kmeans.labels_
+	sil.append(silhouette_score(x,labels, metric = 'euclidean'))
+
+print("PCA silhouette score: ", sil)
 
 # Plotting the MDS graphic
 mds = manifold.MDS(2, max_iter = 1000, n_init = 1)
 Y = mds.fit_transform(x)
 plt.scatter(Y[:,0], Y[:,1])
-plt.show() 
+plt.show()
