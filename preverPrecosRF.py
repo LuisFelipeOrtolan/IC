@@ -3,11 +3,8 @@
 # Imports.
 import pandas as pd 
 import numpy as np
-import scipy as sp
-import seaborn as sns
-import statsmodels.api as sm
 import matplotlib.pyplot as plt
-from sklearn.metrics import mean_squared_error
+from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 
@@ -15,14 +12,13 @@ from sklearn.ensemble import RandomForestRegressor
 scouts = pd.read_csv("Csv's/2014_scouts.csv")
 
 # Prepairing data.
-scouts = scouts.dropna()
+scouts.drop(scouts[(scouts.pontos_num == None)].index, inplace = True)
 scouts.drop(scouts[(scouts.posicao_id == 6)].index, inplace = True)
 
 # Getting only one position.
 # scouts.drop(scouts[(scouts.posicao_id != 1)].index, inplace = True)
 
-#scouts = (scouts-scouts.min()) / (scouts.max()-scouts.min())
-scouts = scouts.dropna(axis = 1, how = 'all')
+scouts = (scouts-scouts.min()) / (scouts.max()-scouts.min())
 
 scouts.drop(columns = ['posicao_id','clube_id','participou','jogos_num','variacao_num','media_num',
 	'partida_id','mando','titular','substituido','tempo_jogado','nota', 'rodada'], inplace = True)
@@ -44,7 +40,7 @@ predictions = modelo.predict(x_test)
 
 # The Score.
 print("Mean Squared Error = ", mean_squared_error(y_test, predictions))
-print("Score = ", modelo.score(x_test,y_test))
+print("Score = ", r2_score(y_test, predictions))
 
 # Getting the dataset's features.
 features = scouts.drop(columns = ['atleta_id','preco_num', 'pontos_num'])

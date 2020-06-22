@@ -3,9 +3,6 @@
 # Imports.
 import pandas as pd 
 import numpy as np
-import scipy as sp
-import seaborn as sns
-import statsmodels.api as sm
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
@@ -19,32 +16,31 @@ scouts = scouts.dropna()
 scouts.drop(scouts[(scouts.posicao_id == 6)].index, inplace = True)
 
 # Getting only one position.
-scouts.drop(scouts[(scouts.posicao_id != 1)].index, inplace = True)
+scouts.drop(scouts[(scouts.posicao_id != 5)].index, inplace = True)
 
-scouts = (scouts-scouts.min()) / (scouts.max()-scouts.min())
-scouts.drop(columns = ['posicao_id','clube_id','participou','jogos_num','pontos_num','media_num',
+#scouts = (scouts-scouts.min()) / (scouts.max()-scouts.min())
+
+scouts.drop(columns = ['atleta_id','preco_num','posicao_id','clube_id','participou','jogos_num','pontos_num','media_num',
 	'partida_id','mando','titular','substituido','tempo_jogado','variacao_num', 'rodada'], inplace = True)
-scouts = scouts.dropna(axis = 1, how = 'all')
 
 # Getting the data for the Random Forest Regressor.
 x = np.column_stack((scouts.FS, scouts.PE, scouts.FF, scouts.PP, scouts.RB, scouts.FC, scouts.CA, scouts.CV, 
-	scouts.FD, scouts.A,scouts.G, scouts.SG, scouts.GS, scouts.DD, scouts.DP, scouts.GC))
-#	scouts.FT, scouts.I, 
+	scouts.FD, scouts.A,scouts.G, scouts.SG, scouts.GS, scouts.DD, scouts.DP, scouts.GC, scouts.FT, scouts.I))
 y = scouts.nota
 
 np.random.seed(30284)
 x_train, x_test, y_train, y_test = train_test_split(x,y)
 
-modelo = RandomForestRegressor(n_estimators = 18, random_state = 42) #ramdom_state = 42 for replicable results.
-modelo.fit(x_train,y_train)
+modelo = RandomForestRegressor(n_estimators = 500, random_state = 42) #ramdom_state = 42 for replicable results.
+modelo.fit(x_train, y_train)
 
 # The Score.
 predict = modelo.predict(x_test)
-print("Score = ", r2_score(predict,list(y_test)))
-print("Mean Squared Error = ", mean_squared_error(predict, list(y_test)))
+print("Score = ", r2_score(predict,y_test))
+print("Mean Squared Error = ", mean_squared_error(predict, y_test))
 
 # Getting the dataset's features.
-features = scouts.drop(columns = ['atleta_id','preco_num', 'nota'])
+features = scouts.drop(columns = ['nota'])
 feature_list = list(features.columns)
 
 # Getting the feature's importances.
