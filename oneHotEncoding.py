@@ -27,7 +27,7 @@ scouts = pd.read_csv("Csv's/2014_scouts.csv")
 # Dropping Unneeded data.
 scouts = scouts.dropna()
 scouts.drop(scouts[(scouts.participou != 1)].index , inplace = True)
-scouts.drop(scouts[(scouts.posicao_id != 1)].index, inplace = True)
+#scouts.drop(scouts[(scouts.posicao_id != 1)].index, inplace = True)
 scouts.drop(columns = ['rodada','clube_id','atleta_id','participou','preco_num','pontos_num','media_num','partida_id', 'posicao_id'], inplace = True)
 
 # Turning floats into ints.
@@ -44,9 +44,10 @@ for data in ['FS','PE','A','FT','FD','FF','G','I','PP','RB','FC','GC','CA','CV',
 for data in ['variacao_num','jogos_num','tempo_jogado','nota','FS','PE','A','FT','FD','FF','G','I','PP','RB','FC','GC','CA','CV','SG','DD','DP','GS']:
 	scouts = oneHotEncoding(scouts,data)
 
-print(scouts.sum()/len(scouts.index) > 0.9)
+#print(scouts.sum()/len(scouts.index) > 0.9)
 
-#frequent_itens = apriori(scouts, min_support = 0.3, use_colnames = True, max_len = None, verbose = 0, low_memory = True)
-#rules = association_rules(frequent_itens, metric = "confidence", min_threshold = 0.7)
-#rules.sort_values(by=['support'], inplace = True, ascending = False)
+frequent_itens = apriori(scouts, min_support = 0.2, use_colnames = True, max_len = None, verbose = 0, low_memory = True)
+rules = association_rules(frequent_itens, metric = "confidence", min_threshold = 0.8)
+rules.sort_values(by=['support'], inplace = True, ascending = False)
 #print(rules[rules['antecedents'] == {'substituido'}])
+print(rules)
