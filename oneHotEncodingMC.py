@@ -52,7 +52,7 @@ scouts.drop(scouts[scouts.isin(["-1"]).any(axis=1)].index, inplace = True)
 
 scouts.drop(columns = ['A_0.0', 'FT_0.0', 'G_0.0', 'I_0.0', 'PP_0.0', 'GC_0.0'], inplace = True)
 
-frequent_itens = apriori(scouts, min_support = 0.2, use_colnames = True, max_len = None, verbose = 0, low_memory = True)
+frequent_itens = apriori(scouts, min_support = 0.4, use_colnames = True, max_len = None, verbose = 0, low_memory = True)
 rules = association_rules(frequent_itens, metric = "confidence", min_threshold = 0.8)
 
 rules.sort_values(by = ['confidence', 'support'], inplace = True)
