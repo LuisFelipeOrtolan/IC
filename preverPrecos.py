@@ -3,6 +3,7 @@
 # Imports.
 import pandas as pd 
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error,r2_score
 from sklearn.model_selection import train_test_split
@@ -30,8 +31,14 @@ model.fit(x_train, y_train)
 scouts_names = ['FS','PE','A','FT','FD','FF','G','I','PP','RB','FC','GC','CA','CV','SG','DD','DP','GS']
 for i in range(0, len(scouts_names)):
 	print(scouts_names[i], ": ", round(model.coef_[i],2))
-
 print()
+
+feat_importances = pd.Series(model.coef_, index = scouts_names)
+feat_importances.nlargest(20).plot(kind='barh')
+plt.title("Feature Importance Linear Regressor")
+plt.grid()
+plt.tight_layout()	
+plt.show()
 
 # The Score
 predictions = model.predict(x_test)

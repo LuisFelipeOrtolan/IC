@@ -26,6 +26,7 @@ scouts.drop(columns = ['atleta_id','preco_num','posicao_id','clube_id','particip
 # Getting the data for the Random Forest Regressor.
 x = np.column_stack((scouts.FS, scouts.PE, scouts.FF, scouts.PP, scouts.RB, scouts.FC, scouts.CA, scouts.CV, 
 	scouts.FD, scouts.A,scouts.G, scouts.SG, scouts.GS, scouts.DD, scouts.DP, scouts.GC, scouts.FT, scouts.I))
+	#scouts.DD,scouts.DP,scouts.GS
 y = scouts.nota
 
 np.random.seed(30284)
@@ -50,5 +51,8 @@ feature_importancias = sorted(feature_importancias, key = lambda x: x[1], revers
 [print('Variable: {:20} Importance: {}'.format(*pair)) for pair in feature_importancias];
 
 feat_importances = pd.Series(modelo.feature_importances_, index = features.columns)
-feat_importances.nlargest(14).plot(kind='barh')
+feat_importances.nlargest(20).plot(kind='barh')
+plt.title("Feature Importance Random Forest Regressor")
+plt.tight_layout()
+plt.grid()
 plt.show()

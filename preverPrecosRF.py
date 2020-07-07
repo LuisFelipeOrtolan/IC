@@ -4,6 +4,7 @@
 import pandas as pd 
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
@@ -18,7 +19,7 @@ scouts.drop(scouts[(scouts.posicao_id == 6)].index, inplace = True)
 # Getting only one position.
 # scouts.drop(scouts[(scouts.posicao_id != 1)].index, inplace = True)
 
-scouts = (scouts-scouts.min()) / (scouts.max()-scouts.min())
+#scouts = (scouts-scouts.min()) / (scouts.max()-scouts.min())
 
 scouts.drop(columns = ['posicao_id','clube_id','participou','jogos_num','variacao_num','media_num',
 	'partida_id','mando','titular','substituido','tempo_jogado','nota', 'rodada'], inplace = True)
@@ -54,7 +55,10 @@ feature_importancias = sorted(feature_importancias, key = lambda x: x[1], revers
 
 # Plotting the feature's importances.
 feat_importances = pd.Series(modelo.feature_importances_, index = features.columns)
-feat_importances.nlargest(14).plot(kind='barh')
+feat_importances.nlargest(20).plot(kind='barh')
+plt.title("Feature Importance RandomForestRegressor")
+plt.tight_layout()
+plt.grid()
 plt.show()
 
 # Plotting the prediction's of the Random Forest Regressor for the original Dataset.
@@ -65,6 +69,8 @@ df = pd.DataFrame(plot, columns = ['predicoes','atleta_id'])
 sns.violinplot( y=df["predicoes"] )
 plt.title("Predictions using the original dataset")
 plt.ylabel("Predictions")
+plt.tight_layout()
+plt.grid()
 plt.show()
 
 # Testing the 2014's model in the 2015's data.
@@ -96,4 +102,4 @@ df['dif'] = df['real'] - df['predict']
 print(df.sort_values(by = 'dif'))
 print("Mean Squared Error for 2015: ", mean_squared_error(predictions2015,y))
 
-print(modelo.score(x,y))
+print(modelo.r2_score(x,y))

@@ -48,6 +48,9 @@ for n in range(2,60):
 
 # Plot the mean squared error for every number of clusters.
 plt.plot(list(range(2,60)),values)
+plt.title("Elbow method for detailed data")
+plt.tight_layout()
+plt.grid()
 plt.show()
 
 # Using the silhouette model to try to discover the best number of clusters for the K-means algorithm.
@@ -77,8 +80,9 @@ print("PCA silhouette score: ", sil)
 mds = manifold.MDS(2, max_iter = 1000, n_init = 1)
 Y = mds.fit_transform(x)
 plt.scatter(Y[:,0], Y[:,1])
-plt.show() 
-
+plt.title("MDS for detailed data")
+plt.tight_layout()
+plt.show()
 
 # For scouts that every line has the scouts from a team added in the match:
 
@@ -114,6 +118,9 @@ for n in range(2,60):
 
 # Plot the mean squared error for every number of clusters.
 plt.plot(list(range(2,60)),values)
+plt.title("Elbow method for undetailed data")
+plt.tight_layout()
+plt.grid()
 plt.show()
 
 # Using the silhouette model to try to discover the best number of clusters for the K-means algorithm.
@@ -143,4 +150,6 @@ print("PCA silhouette score: ", sil)
 mds = manifold.MDS(2, max_iter = 1000, n_init = 1)
 Y = mds.fit_transform(x)
 plt.scatter(Y[:,0], Y[:,1])
+plt.title("MDS for undetailed data")
+plt.tight_layout()
 plt.show()

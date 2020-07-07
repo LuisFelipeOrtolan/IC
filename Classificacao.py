@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, accuracy_score
@@ -9,7 +10,7 @@ scouts_posicao = pd.read_csv("Csv's/scouts_por_time_detalhado.csv")
 
 scouts_posicao['vencedor'] = scouts['vencedor']
 
-scouts.drop(columns = ['clube_id', 'pontos_num', 'preco_num','variacao_num', 'G', 'A', 'SG', 'GC','GS'], inplace = True)
+scouts.drop(columns = ['clube_id', 'pontos_num', 'preco_num','variacao_num', 'G', 'A', 'SG', 'GC','GS','nota'], inplace = True)
 
 columns = []
 
@@ -58,13 +59,30 @@ classifier.fit(x_train, y_train)
 
 predictions = classifier.predict(x_test)
 
-print("R2 = ", accuracy_score(predictions, y_test))
+print("Accuracy = ", accuracy_score(predictions, y_test))
 
+# Getting the dataset's features.
+features = new_scouts.drop(columns = ['vencedor'])
+feature_list = list(features.columns)
+
+# Getting the feature's importances.
+importancias = list(classifier.feature_importances_)
+feature_importancias = [(feature, round(importancias, 2)) for feature, importancias in zip(feature_list, importancias)]
+feature_importancias = sorted(feature_importancias, key = lambda x: x[1], reverse = True)
+[print('Variable: {:20} Importance: {}'.format(*pair)) for pair in feature_importancias];
+
+# Plotting the feature's importances.
+feat_importances = pd.Series(classifier.feature_importances_, index = features.columns)
+feat_importances.nlargest(50).plot(kind='barh')
+plt.title("Feature Importance of Random Forest Classifier")
+plt.tight_layout()
+plt.grid()
+plt.show()
 
 scouts_posicao.drop(columns = ['clube_id'], inplace = True)
 
 for posicao in range(1,6):
-	colunas = ['pontos_num_','preco_num_','variacao_num_', 'G_', 'A_', 'SG_', 'GC_', 'GS_']
+	colunas = ['pontos_num_','preco_num_','variacao_num_', 'G_', 'A_', 'SG_', 'GC_', 'GS_','nota_']
 	new_colunas = []
 	for item in colunas:
 		new_colunas.append(item+str(posicao))
@@ -117,4 +135,22 @@ classifier.fit(x_train, y_train)
 
 predictions = classifier.predict(x_test)
 
-print("R2 = ", accuracy_score(predictions, y_test))
+print("Accuracy = ", accuracy_score(predictions, y_test))
+
+# Getting the dataset's features.
+features = new_scouts.drop(columns = ['vencedor'])
+feature_list = list(features.columns)
+
+# Getting the feature's importances.
+importancias = list(classifier.feature_importances_)
+feature_importancias = [(feature, round(importancias, 2)) for feature, importancias in zip(feature_list, importancias)]
+feature_importancias = sorted(feature_importancias, key = lambda x: x[1], reverse = True)
+[print('Variable: {:20} Importance: {}'.format(*pair)) for pair in feature_importancias];
+
+# Plotting the feature's importances.
+feat_importances = pd.Series(classifier.feature_importances_, index = features.columns)
+feat_importances.nlargest(50).plot(kind='barh')
+plt.title("Feature Importance Random Forest Classifier")
+plt.tight_layout()
+plt.grid()
+plt.show()

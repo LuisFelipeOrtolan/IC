@@ -1,5 +1,6 @@
 import pandas as pd 
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.ensemble import RandomForestRegressor
@@ -29,7 +30,7 @@ scouts['vencedor'] = np.where(scouts['visitante'] == scouts['mandante'], 0, scou
 # Dropping columns that doesn't help anymore.
 scouts.drop(columns = ['placar_oficial_visitante', 'placar_oficial_mandante', 'mandante','visitante', 'atleta_id','clube_id','participou','jogos_num','pontos_num','media_num','preco_num','variacao_num',
 	'titular','substituido','tempo_jogado','nota','posicao_id'
-	#,'A','G','GC','SG','GS'
+	,'A','G','GC','SG','GS'
 	], inplace = True)
 
 scouts['vitoria'] = np.where(1,0,0)
@@ -43,7 +44,7 @@ scouts.drop(columns = ['mando', 'partida_id','vencedor'] , inplace = True)
 
 
 x = np.column_stack((scouts.FS, scouts.PE, scouts.FT, scouts.FD, scouts.FF, scouts.I, scouts.PP, scouts.RB, scouts.FC, scouts.CA, scouts.CV, scouts.DD, scouts.DP
-	,scouts.A,scouts.G, scouts.GC, scouts.SG, scouts.GS
+	#,scouts.A,scouts.G, scouts.GC, scouts.SG, scouts.GS
 	))
 y = scouts.vitoria
 
@@ -65,3 +66,10 @@ feature_importancias = [(feature, round(importancias, 2)) for feature, importanc
 feature_importancias = sorted(feature_importancias, key = lambda x: x[1], reverse = True)
 [print('Variable: {:20} Importance: {}'.format(*pair)) for pair in feature_importancias];
 
+# Plotting the feature's importances.
+feat_importances = pd.Series(modelo.feature_importances_, index = features.columns)
+feat_importances.nlargest(20).plot(kind='barh')
+plt.title("Feature Importance RandomForestRegressor")
+plt.tight_layout()
+plt.grid()
+plt.show()
