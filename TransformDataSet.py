@@ -1,3 +1,5 @@
+# Code to transform the dataset from player's scouts to team's scouts by summing
+
 import pandas as pd 
 
 # Opening Csv.

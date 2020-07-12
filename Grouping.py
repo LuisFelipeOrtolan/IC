@@ -1,18 +1,14 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.cluster import KMeans
 from sklearn.metrics import silhouette_score, mean_squared_error
-from sklearn.feature_selection import SelectKBest, chi2
 from sklearn.decomposition import PCA
 from sklearn import manifold
 
-# For scouts that every line has the scouts from every position in a match:
+# First, grouping will be used in the dataset with differentiation between positions.
 
 # Opening csv.
 scouts_por_time_detalhado = pd.read_csv("Csv's/scouts_por_time_detalhado.csv")
-
 
 # Dropping unneeded data.
 scouts_por_time_detalhado.drop(columns = ['clube_id','partida_id'], inplace = True)
@@ -84,11 +80,10 @@ plt.title("MDS for detailed data")
 plt.tight_layout()
 plt.show()
 
-# For scouts that every line has the scouts from a team added in the match:
+# Now grouping will be used in the dataset with no differentiation between positions.
 
 # Opening csv.
 scouts_detalhado = pd.read_csv("Csv's/scouts_detalhado.csv")
-
 
 # Dropping unneeded data.
 scouts_detalhado.drop(columns = ['clube_id','partida_id', 'pontos_num','preco_num','variacao_num', 'vencedor'], inplace = True)

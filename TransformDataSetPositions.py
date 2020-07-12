@@ -1,6 +1,6 @@
+# Code to transform the dataset from player's scouts to team's scouts by summing them and separating each position.
+
 import pandas as pd
-import numpy as np
-from sklearn.cluster import KMeans
 
 # Opening Csv.
 scouts = pd.read_csv("Csv's/2014_scouts.csv")

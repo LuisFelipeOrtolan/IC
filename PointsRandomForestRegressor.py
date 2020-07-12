@@ -19,24 +19,24 @@ scouts.drop(scouts[(scouts.posicao_id == 6)].index, inplace = True)
 # Getting only one position.
 # scouts.drop(scouts[(scouts.posicao_id != 1)].index, inplace = True)
 
-#scouts = (scouts-scouts.min()) / (scouts.max()-scouts.min())
-
+# Dropping unneeded data.
 scouts.drop(columns = ['posicao_id','clube_id','participou','jogos_num','variacao_num','media_num',
 	'partida_id','mando','titular','substituido','tempo_jogado','nota', 'rodada'], inplace = True)
-
 
 # Getting the data for the Random Forest Regressor.
 x = np.column_stack((scouts.FS, scouts.PE, scouts.FF, scouts.PP, scouts.RB, scouts.FC, scouts.CA, scouts.CV,
 	scouts.DD, scouts.DP, scouts.GS, scouts.GC, scouts.FT, scouts.I, scouts.FD, scouts.A,scouts.G, scouts.SG))
 y = scouts.pontos_num
 
+# Splitting the data for the regressor.
 np.random.seed(30284)
 x_train, x_test, y_train, y_test = train_test_split(x,y)
 
-# The Random Forest Regressor.
+# Training the model.
 modelo = RandomForestRegressor(n_estimators = 300, random_state = 42) #ramdom_state = 42 for replicable results.
 modelo.fit(x_train,y_train)
 
+# Getting it's predictions.
 predictions = modelo.predict(x_test)
 
 # The Score.
@@ -79,27 +79,23 @@ treinadores = pd.read_csv("Csv's/2015_atletas.csv")
 
 scouts2015 = scouts2015.dropna()
 scouts2015 = scouts2015.dropna(axis = 1, how = 'all')
-#scouts2015 = (scouts2015-scouts2015.min()) / (scouts2015.max()-scouts2015.min())
 
+# Removing coaches from the 2015 dataset.
 treinadores = treinadores.query("posicao_id == 6")
 treinadores = list(treinadores['id'])
-
 scouts2015 = scouts2015.loc[~scouts2015.atleta_id.isin(treinadores)]
 
+# Dropping unneeded dataa.
 scouts2015 = scouts2015.drop(columns = ['atleta_id', 'rodada','clube_id','jogos_num','variacao_num','media_num','preco_num'])
 
+# Getting the data for the Random Forest Regressor.
 x = np.column_stack((scouts2015.FS, scouts2015.PE, scouts2015.FF, scouts2015.PP, scouts2015.RB, scouts2015.FC, scouts2015.CA, scouts2015.CV,
 	scouts2015.DD, scouts2015.DP, scouts2015.GS, scouts2015.GC, scouts2015.FT, scouts2015.I, scouts2015.FD, scouts2015.A,scouts2015.G, scouts2015.SG))
 y = scouts2015.pontos_num
 
+# Getting it's predictions
 predictions2015 = modelo.predict(x)
 
-data = {'predict': predictions2015, 'real':y}
-df = pd.DataFrame(data)
-
-df['dif'] = df['real'] - df['predict']
-
-print(df.sort_values(by = 'dif'))
+# The score
 print("Mean Squared Error for 2015: ", mean_squared_error(predictions2015,y))
-
 print(modelo.r2_score(x,y))

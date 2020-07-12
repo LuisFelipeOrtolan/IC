@@ -1,4 +1,4 @@
-# Prever preços usando Regressão Polinomial.
+# Prever notas usando Regressão Linear.
 
 # Imports.
 import pandas as pd 
@@ -12,18 +12,23 @@ from sklearn.model_selection import train_test_split
 scouts = pd.read_csv("Csv's/2014_scouts.csv")
 
 # Prepairing data.
-scouts.drop(scouts[(scouts.pontos_num == None)].index, inplace = True)
+scouts = scouts.dropna()
+scouts.drop(scouts[(scouts.nota == None)].index, inplace = True)
 scouts.drop(scouts[(scouts.posicao_id == 6)].index, inplace = True)
+scouts.drop(scouts[(scouts.posicao_id != 5)].index, inplace = True)
+
 
 # Stacking the data for the regression.
 x = np.column_stack((scouts.FS,scouts.PE,scouts.A,scouts.FT,scouts.FD,scouts.FF,scouts.G,scouts.I,scouts.PP,scouts.RB,scouts.FC,
 	scouts.GC,scouts.CA,scouts.CV,scouts.SG,scouts.DD,scouts.DP,scouts.GS))
-y = scouts.pontos_num
+y = scouts.nota
 
+
+# Splitting the data for the regressor
 np.random.seed(30284)
 x_train, x_test, y_train, y_test = train_test_split(x,y)
 
-# Using Polynomial Regression, degrees one to four.
+# Training model.
 model = LinearRegression()
 model.fit(x_train, y_train)
 
@@ -31,7 +36,6 @@ model.fit(x_train, y_train)
 scouts_names = ['FS','PE','A','FT','FD','FF','G','I','PP','RB','FC','GC','CA','CV','SG','DD','DP','GS']
 for i in range(0, len(scouts_names)):
 	print(scouts_names[i], ": ", round(model.coef_[i],2))
-print()
 
 feat_importances = pd.Series(model.coef_, index = scouts_names)
 feat_importances.nlargest(20).plot(kind='barh')
@@ -44,4 +48,4 @@ plt.show()
 predictions = model.predict(x_test)
 print("Score for the Linear Regressor = ", r2_score(y_test, predictions))
 print("Mean Squared Error for the Linear Regressor = ", mean_squared_error(y_test, predictions))
-print()
+
