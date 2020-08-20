@@ -52,4 +52,4 @@ scouts.loc[scouts['vencedor'] > 0, 'vencedor'] = 1
 print(scouts)
 
 # Exporting the dataframe to a csv.
-scouts.to_csv("Csv's/scouts_detalhado.csv", index = False)
+scouts.to_csv("Csv's/scouts_matches.csv", index = False)

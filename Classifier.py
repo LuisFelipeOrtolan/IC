@@ -8,8 +8,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 
 # Import datasets.
-scouts = pd.read_csv("Csv's/scouts_detalhado.csv")
-scouts_posicao = pd.read_csv("Csv's/scouts_por_time_detalhado.csv")
+scouts = pd.read_csv("Csv's/scouts_matches.csv")
+scouts_posicao = pd.read_csv("Csv's/scouts_matches_positions.csv")
 
 # First, the classifier will be used in the dataset with no differentiation between positions.
 

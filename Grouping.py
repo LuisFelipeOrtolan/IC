@@ -8,7 +8,7 @@ from sklearn import manifold
 # First, grouping will be used in the dataset with differentiation between positions.
 
 # Opening csv.
-scouts_por_time_detalhado = pd.read_csv("Csv's/scouts_por_time_detalhado.csv")
+scouts_por_time_detalhado = pd.read_csv("Csv's/scouts_matches_positions.csv")
 
 # Dropping unneeded data.
 scouts_por_time_detalhado.drop(columns = ['clube_id','partida_id'], inplace = True)
@@ -83,7 +83,7 @@ plt.show()
 # Now grouping will be used in the dataset with no differentiation between positions.
 
 # Opening csv.
-scouts_detalhado = pd.read_csv("Csv's/scouts_detalhado.csv")
+scouts_detalhado = pd.read_csv("Csv's/scouts_matches.csv")
 
 # Dropping unneeded data.
 scouts_detalhado.drop(columns = ['clube_id','partida_id', 'pontos_num','preco_num','variacao_num', 'vencedor'], inplace = True)

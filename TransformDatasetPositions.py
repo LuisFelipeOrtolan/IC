@@ -115,4 +115,4 @@ scouts_detalhado.reset_index(drop = True, inplace = True)
 print(scouts_detalhado)
 
 # Exporting the dataframe to a csv.
-scouts_detalhado.to_csv("Csv's/scouts_por_time_detalhado.csv", index = False)
+scouts_detalhado.to_csv("Csv's/scouts_matches_positions.csv", index = False)
