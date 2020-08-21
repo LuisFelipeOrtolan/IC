@@ -8,4 +8,8 @@ Além disso, ainda existe o documento Acuraccy com a acurácia de, primeiro os s
 
 In this folder are the results of the codes using classification. The target was if a team won, tied or lost from it's scouts. Two graphics show the feature imprtances in the classification (Scouts with position detailded's Feature Importance e Scouts without position detailded's Feature Importance). 
 
+<<<<<<< HEAD
 Beyond that, there's the document called Acuraccy with the acuraccy of the classification first for the team scouts with positions detailed and the second one without.
+=======
+Beyond that, there's the document called Acuraccy with the acuraccy of the classification first for the team scouts with positions detailed and the second one without.
+>>>>>>> d91e1338d0d901e5d399086f254bf9283305dade
