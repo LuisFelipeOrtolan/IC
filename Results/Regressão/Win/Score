@@ -1,9 +1,9 @@
-Com atributos óbvios (gols, assistências):
+With stats that indicates goals:
 
 R²: -2.0261139235526198
 MSE: 0.719059212874819
 
-Sem atributos óbvios:
+Without stats that indicates goals:
 
 R²:-5.654002089639247
 MSE:0.8577761461740314

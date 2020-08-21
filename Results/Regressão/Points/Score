@@ -9,6 +9,6 @@ R²: 0.9664673010753423
 MSE: 0.24493503835301092
 
 
-Random Forest tentando prever 2015:
+Random Forest trying to predict using 2015 data:
 R²: -14.519744235985238
 MSE: 114.37155910328256
